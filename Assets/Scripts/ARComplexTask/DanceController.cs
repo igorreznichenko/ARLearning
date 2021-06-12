@@ -49,7 +49,6 @@ namespace ARComplexTask
                         SetLights(false);
                         break;
                     }
-
             }
         }
 
@@ -62,9 +61,7 @@ namespace ARComplexTask
                 else
                     light.Stop();
             }
-
         }
-
     }
     public enum DanceStyle
     {

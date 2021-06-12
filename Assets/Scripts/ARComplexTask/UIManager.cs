@@ -11,6 +11,8 @@ namespace ARComplexTask
         public Button Controll;
         public AudioClip[] _playlist;
         public TextMeshProUGUI MusicName;
+        public Slider MusicScrollPlay;
+        public TextMeshProUGUI PlayTime;
         private AudioSource _audioSource;
         private int _playlistPosition = 0;
         private bool _isPlaying;
@@ -20,8 +22,14 @@ namespace ARComplexTask
             _audioSource = GetComponent<AudioSource>();
             Controll.onClick.AddListener(() => { OnClick(Controll); });
             LeftButton.onClick.AddListener(() => LeftClick());
-            RightButton.onClick.AddListener(()=> RightClick());
+            RightButton.onClick.AddListener(() => RightClick());
+            MusicScrollPlay.onValueChanged.AddListener((float time) => ScrollMusic(time));
             _isPlaying = false;
+        }
+        private void Update()
+        {
+            UpdateScroll();
+            SetPlayTime();
         }
         public void OnClick(Button button)
         {
@@ -40,7 +48,6 @@ namespace ARComplexTask
             }
             _isPlaying = !_isPlaying;
         }
-
         public void InitState()
         {
             CheckRange();
@@ -51,11 +58,35 @@ namespace ARComplexTask
         {
             TextMeshProUGUI text = Controll.GetComponentInChildren<TextMeshProUGUI>();
             text.text = "||";
+            _audioSource.Stop();
             _isPlaying = true;
+        }
+        private void UpdateScroll()
+        {
+            MusicScrollPlay.SetValueWithoutNotify(_audioSource.time);
+            if (_audioSource.time == _audioSource.clip.length)
+            {
+                if (_playlistPosition != _playlist.Length - 1)
+                    RightClick();
+                else
+                {
+                    Controll.onClick.Invoke();
+                    _audioSource.time = 0;
+                }
+            }
+        }
+        private void SetPlayTime()
+        {
+            int time = (int)_audioSource.clip.length;
+            int curentTime = (int)_audioSource.time;
+            PlayTime.text = string.Format("{0:00}:{1:00}/{2:00}:{3:00}",curentTime/60,curentTime%60,time/60,time%60);
+        }
+        private void ScrollMusic(float time)
+        {
+            _audioSource.time = time;
         }
         private void LeftClick()
         {
-
             _playlistPosition--;
             SetCurrentState();
         }
@@ -81,9 +112,11 @@ namespace ARComplexTask
         {
             _audioSource.clip = _playlist[_playlistPosition];
             MusicName.text = _audioSource.clip.name;
-            MusicName.color = Random.ColorHSV();
+            MusicScrollPlay.maxValue = _audioSource.clip.length;
             _audioSource.Play();
+            _audioSource.time = 0;
         }
+
         private void CheckRange()
         {
             if (_playlist.Length == 0)
@@ -98,7 +131,7 @@ namespace ARComplexTask
                 {
                     RightButton.interactable = false;
                 }
-                if (_playlistPosition > 0 && _playlistPosition < _playlist.Length-1)
+                if (_playlistPosition > 0 && _playlistPosition < _playlist.Length - 1)
                 {
                     LeftButton.interactable = RightButton.interactable = true;
                 }

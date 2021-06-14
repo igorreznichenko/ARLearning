@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 namespace CarControllerScene
 {
+    [Serializable]
     struct Wheel
     {
         public WheelPosition Position;
@@ -13,7 +12,7 @@ namespace CarControllerScene
     enum WheelPosition
     {
         Real,
-        Font
+        Front
     }
     public class CarControllScript : MonoBehaviour
     {
@@ -27,28 +26,39 @@ namespace CarControllerScene
         {
             Move();
             Turn();
+            AnimateWheels();
         }
+
+        private void AnimateWheels()
+        {
+            foreach (var wheel in _wheels)
+            {
+
+                Quaternion rotation;
+                Vector3 position;
+                wheel.Collider.GetWorldPose(out position, out rotation);
+                wheel.Transform.rotation = rotation;
+                wheel.Transform.position = position;
+            }
+        }
+
         private void Move()
         {
             float vertical = _joystick.Vertical;
-            if (Mathf.Abs(vertical) > 0.1) {
-                foreach (var wheel in _wheels)
-                {
-                    wheel.Collider.motorTorque = vertical * MaxSpeed *Time.deltaTime;
-                }
+            foreach (var wheel in _wheels)
+            {
+                wheel.Collider.motorTorque = vertical * MaxSpeed;
+                wheel.Transform.position = wheel.Collider.transform.position;
             }
         }
         private void Turn()
         {
             float horizontal = _joystick.Horizontal;
-            if (Mathf.Abs(horizontal) > 0.1)
+            foreach (var wheel in _wheels)
             {
-                foreach (var wheel in _wheels)
+                if (wheel.Position == WheelPosition.Front)
                 {
-                    if (wheel.Position == WheelPosition.Font) { 
-                        wheel.Collider.steerAngle = MaxTurnAngle * horizontal * Time.deltaTime;
-                        wheel.Transform.rotation = wheel.Collider.transform.rotation;
-                    }
+                    wheel.Collider.steerAngle = MaxTurnAngle * horizontal;
                 }
             }
         }

@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/3rd-Party/SamplesResources/Scenes/0-Main.unity
-    guid: a09cb257d566c489595b16ab37547666
+    path: Assets/Scenes/Release/ARComplexTask.unity
+    guid: e2cea86d475b5aa4aa620a70c78ee046
   m_configObjects: {}

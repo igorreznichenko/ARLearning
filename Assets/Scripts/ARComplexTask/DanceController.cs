@@ -4,7 +4,7 @@ namespace ARComplexTask
 {
 	public class DanceController : MonoBehaviour
 	{
-		[SerializeField] ParticleSystem[] _lights;
+		[SerializeField] private ParticleSystem[] _lights;
 		private Animator _animator;
 		private int _hipHopDance = Animator.StringToHash("Hip-hop");
 		private int _sillyDance = Animator.StringToHash("Silly");

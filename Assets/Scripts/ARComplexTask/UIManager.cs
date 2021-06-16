@@ -7,29 +7,21 @@ namespace ARComplexTask
 {
 	public class UIManager : MonoBehaviour
 	{
-		[SerializeField] DanceController _controller;
-		[SerializeField] Button _leftButton;
-		[SerializeField] Button _rightButton;
-		[SerializeField] Button _controll;
-		[SerializeField] AudioClip[] _playlist;
-		[SerializeField] TextMeshProUGUI _musicName;
-		[SerializeField] Slider _musicScrollPlay;
-		[SerializeField] TextMeshProUGUI _playTime;
+		[SerializeField] private DanceController _controller;
+		[SerializeField] private Button _leftButton;
+		[SerializeField] private Button _rightButton;
+		[SerializeField] private Button _controll;
+		[SerializeField] private AudioClip[] _playlist;
+		[SerializeField] private TextMeshProUGUI _musicName;
+		[SerializeField] private Slider _musicScrollPlay;
+		[SerializeField] private TextMeshProUGUI _playTime;
 		private AudioSource _audioSource;
 		private int _playlistPosition = 0;
 		private bool _isPlaying = false;
-		private UnityAction _controllAction;
-		private UnityAction _leftButtonAction;
-		private UnityAction _rightButtonAction;
-		private UnityAction<float> _musicScrollAction;
 
 		private void Awake()
 		{
 			_audioSource = GetComponent<AudioSource>();
-			_controllAction = () => OnClick(_controll);
-			_leftButtonAction = () => LeftClick();
-			_rightButtonAction = () => RightClick();
-			_musicScrollAction = (time) => ScrollMusic(time);
 		}
 
 		private void Update()
@@ -102,18 +94,18 @@ namespace ARComplexTask
 
 		private void SubscribeEvents()
 		{
-			_controll.onClick.AddListener(_controllAction);
-			_musicScrollPlay.onValueChanged.AddListener(_musicScrollAction);
-			_leftButton.onClick.AddListener(_leftButtonAction);
-			_rightButton.onClick.AddListener(_rightButtonAction);
+			_controll.onClick.AddListener(()=> OnClick(_controll));
+			_musicScrollPlay.onValueChanged.AddListener((time) => ScrollMusic(time));
+			_leftButton.onClick.AddListener(() => LeftClick());
+			_rightButton.onClick.AddListener(() => RightClick());
 		}
 
 		private void UnsubscribeEvents()
 		{
-			_controll.onClick.RemoveListener(_controllAction);
-			_musicScrollPlay.onValueChanged.RemoveListener(_musicScrollAction);
-			_leftButton.onClick.RemoveListener(_leftButtonAction);
-			_rightButton.onClick.RemoveListener(_rightButtonAction);
+			_controll.onClick.RemoveAllListeners();
+			_musicScrollPlay.onValueChanged.RemoveAllListeners();
+			_leftButton.onClick.RemoveAllListeners();
+			_rightButton.onClick.RemoveAllListeners();
 		}
 
 		private void SetPlayTime()

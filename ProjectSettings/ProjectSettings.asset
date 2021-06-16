@@ -175,7 +175,7 @@ PlayerSettings:
     iPhone: com.vuforia.engine.VuforiaEngine
   buildNumber:
     iPhone: 0
-  AndroidBundleVersionCode: 988
+  AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1

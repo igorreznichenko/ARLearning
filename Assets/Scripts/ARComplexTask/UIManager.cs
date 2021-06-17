@@ -40,9 +40,9 @@ namespace ARComplexTask
 			UnsubscribeEvents();
 		}
 
-		public void OnClick(Button button)
+		public void OnClick()
 		{
-			TextMeshProUGUI text = button.GetComponentInChildren<TextMeshProUGUI>();
+			TextMeshProUGUI text = _leftButton.GetComponentInChildren<TextMeshProUGUI>();
 			if (_isPlaying)
 			{
 				text.text = "\u25BA";
@@ -94,18 +94,18 @@ namespace ARComplexTask
 
 		private void SubscribeEvents()
 		{
-			_controll.onClick.AddListener(()=> OnClick(_controll));
-			_musicScrollPlay.onValueChanged.AddListener((time) => ScrollMusic(time));
-			_leftButton.onClick.AddListener(() => LeftClick());
-			_rightButton.onClick.AddListener(() => RightClick());
+			_controll.onClick.AddListener(OnClick);
+			_musicScrollPlay.onValueChanged.AddListener(ScrollMusic);
+			_leftButton.onClick.AddListener(LeftClick);
+			_rightButton.onClick.AddListener(RightClick);
 		}
 
 		private void UnsubscribeEvents()
 		{
-			_controll.onClick.RemoveAllListeners();
-			_musicScrollPlay.onValueChanged.RemoveAllListeners();
-			_leftButton.onClick.RemoveAllListeners();
-			_rightButton.onClick.RemoveAllListeners();
+			_controll.onClick.RemoveListener(OnClick);
+			_musicScrollPlay.onValueChanged.RemoveListener(ScrollMusic);
+			_leftButton.onClick.RemoveListener(LeftClick);
+			_rightButton.onClick.RemoveListener(RightClick);
 		}
 
 		private void SetPlayTime()

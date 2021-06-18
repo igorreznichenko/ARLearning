@@ -42,7 +42,7 @@ namespace ARComplexTask
 
 		public void OnClick()
 		{
-			TextMeshProUGUI text = _leftButton.GetComponentInChildren<TextMeshProUGUI>();
+			TextMeshProUGUI text = _controll.GetComponentInChildren<TextMeshProUGUI>();
 			if (_isPlaying)
 			{
 				text.text = "\u25BA";
